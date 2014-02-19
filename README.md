@@ -13,17 +13,19 @@ What is different?
 How to use it?
 --------------
 
-1. Implement IElmahAuthorizer interface and void DoAuthorization(AuthorizationContext filterContext) method. If authorization is not valid throw an exception, else just return from your method :D.
+1. **Implement IElmahAuthorizer interface** and void DoAuthorization(AuthorizationContext filterContext) method. If authorization is not valid throw an exception, else just return from your method :D.
 
-2. In the file ~/App_Start/RouteConfig.cs add following lines to the method void RegisterRoutes(RouteCollection routes):
+2. In the file ~/App_Start/RouteConfig.cs **add following** lines to the method void **RegisterRoutes(RouteCollection routes)**:
 
-	    // Initialization of implementation of IElmahAuthorizer.
-	    ElmahAuthorizer authorizer = new ElmahAuthorizer();
+    ``` c#
+    // Initialization of implementation of IElmahAuthorizer.
+    **ElmahAuthorizer authorizer = new ElmahAuthorizer();**
+    
+    // Initialization of Elmah.Mvc module.
+    **Elmah.Mvc.Bootstrap.Initialize(authorizer);**
+    ```
 
-	    // Initialization of Elmah.Mvc module.
-	    Elmah.Mvc.Bootstrap.Initialize(authorizer);
-
-3. Set up your settings in configuration file Web.config.
+3. Set up your settings in **configuration file Web.config**.
 
 More or less, everything else is the same as in [ELMAH.MVC](https://github.com/alexanderbeletsky/elmah-mvc). This goes for configuration, authentification, users, roles and all the other stuff that you can set in Web.Config file.
 
@@ -41,7 +43,7 @@ You know that song Angel of Harlem by U2? Yes, good. So the first verses go like
 	It was a cold and wet December day,
 	When we touched the ground at JFK, ...
 
-It would be so cool if they would change this to honor Docot Who. It would go something like this:
+It would be so cool if they would change this to honor Docot Who? It would go something like this:
 
 	It was a cold and wet December day
 	When I met a man from Gallifrey, ...
@@ -51,4 +53,8 @@ To tell you the truth I'm not sure who's better Smith, Tennant or Ecclestone? Ma
 And so, the Gallifrey falls no more they say... That's good I think. Maybe :D Peter Capaldi would know better about that.
 
 If you're asking yourself why did I write all this stuff, well, that's because It's already morning and there is no sense in sleeping right now.
+
 Take care now, I'm going to sleep. 
+----------------------------------
+
+![alt text](http://cdn3.whatculture.com/wp-content/uploads/2012/11/matt-smith-doctor-who-bow-tie.jpg "Man from Gallifrey")
