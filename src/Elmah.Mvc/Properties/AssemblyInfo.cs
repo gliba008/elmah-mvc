@@ -35,4 +35,5 @@ using System.Web;
 [assembly: AssemblyVersion("2.0.0.*")]
 [assembly: AssemblyFileVersion("2.0.0")]
 
-[assembly: PreApplicationStartMethod(typeof(Elmah.Mvc.Bootstrap), "Initialize")]
+// Initialize method from Bootstrap class is not called automatically.
+// [assembly: PreApplicationStartMethod(typeof(Elmah.Mvc.Bootstrap), "Initialize")]

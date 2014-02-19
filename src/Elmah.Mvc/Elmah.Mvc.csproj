@@ -49,6 +49,7 @@
     <Compile Include="ElmahController.cs" />
     <Compile Include="ElmahResult.cs" />
     <Compile Include="HandleErrorAttribute.cs" />
+    <Compile Include="IElmahAuthorizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>

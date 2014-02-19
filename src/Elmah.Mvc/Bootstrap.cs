@@ -18,6 +18,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+// Extensions made by gliba008. Use this file in any way you want :D
+//
 
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -26,8 +28,17 @@ namespace Elmah.Mvc
 {
     public class Bootstrap
     {
-        public static void Initialize()
+        /* 
+         * Initialize is not not called automatically.
+         * You must call Initialize() in one of your
+         * methods in App_Start folder.
+         * */
+        public static void Initialize(IElmahAuthorizer Authorizer = null)
         {
+            // Setting an IElmahAuthorizer for ElmahController to user.
+            ElmahController.Authorizer = Authorizer;
+
+            // Rest of the method as it is in original file :D.
 	        var disableHandleError = Settings.DisableHandleErrorFilter;
             if (!disableHandleError)
             {
