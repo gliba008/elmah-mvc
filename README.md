@@ -1,103 +1,54 @@
-ELMAH.MVC
+MNM.ELMAH.MVC
 =========
 
-For painless integration of ELMAH into ASP.NET MVC application.
+This is just an extension for [ELMAH.MVC](https://github.com/alexanderbeletsky/elmah-mvc).
 
-What's changed in 2.0 version?
-------------------------------
+What is different?
+------------------
 
-For details, please follow that blog post - [ELMAH.MVC v.2.0 - Release Candidate](http://www.beletsky.net/2012/06/elmahmvc-v200-release-candidate.html)
+- Added IElmahAuthorizer interface, which is used for custom authorizing.
+- ElmahController is extended so it can use IElmahAuthorizer implementation.
+- Bootstrap.Initialize() will not be called automatically and you must pass IElmahAuthorizer to it.
 
-What's the goal?
--------------------
+How to use it?
+--------------
 
-With ELMAH.MVC you got nice and clear MVC style routing to ELMAH error page. ELMAH can be accessed by:
+1. Implement IElmahAuthorizer interface and void DoAuthorization(AuthorizationContext filterContext) method. If authorization is not valid throw an exception, else just return from your method :D.
 
-	http://yourapp.com/elmah
+2. In the file ~/App_Start/RouteConfig.cs add following lines to the method void RegisterRoutes(RouteCollection routes):
 
-By doing that, you can apply any authorization strategies or routes. In short, no more
+    // Initialization of implementation of IElmahAuthorizer.
+    ElmahAuthorizer authorizer = new ElmahAuthorizer();
 
-	http://yourapp.com/elmah.axd
+    // Initialization of Elmah.Mvc module.
+    Elmah.Mvc.Bootstrap.Initialize(authorizer);
 
-That could be used for [ASP.NET session hijacking with Google and ELMAH](http://www.troyhunt.com/2012/01/aspnet-session-hijacking-with-google.html).
+3. Set up your settings in configuration file Web.config.
 
-How to use in my application?
-------------------------------
+More or less, everything else is the same as in [ELMAH.MVC](https://github.com/alexanderbeletsky/elmah-mvc). This goes for configuration, authentification, users, roles and all the other stuff that you can set in Web.Config file.
 
-Easy. Install ELMAH by NuGet, in package console
+Anything else?
+--------------
 
-	Install-Package Elmah.MVC
+Well I was searching for some sort of custom authorization for Elmah.Mvc (besides roles and users filtering) and I had no luck. So I wrote this tiny extension in few minutes and I decided that I would share it. Maybe it's not the smartest code right now, but I'll update it in the future because I hate unfinished and bad code.
+Well I'm thinking right now maybe I could do it right away, BUT!!, it's 4 o'clock in the morning and maybe rewriting this now isn't such a good idea.
+Or maybe it is, I don't know.
 
-For further ELMAH configuration please check the [documentation](https://code.google.com/p/elmah/).
+But when you are already here maybe I could tell you my intersting idea? Here it goes:
 
-Should I use HandleErrorAttribute?
-----------------------------------
+You know that song Angel of Harlem by U2? Yes, good. So the first verses go like this:
 
-If you tried to use ELMAH in ASP.NET MVC, you are probably implemented your own HandleErrorAttribute, as it's shown in this [example](http://stackoverflow.com/questions/766610/how-to-get-elmah-to-work-with-asp-net-mvc-handleerror-attribute). You no longer need to apply this custom code with Elmah.MVC. As soon you installed package, so can safely remove your HandleError attribute, since it's already included into package.
+	It was a cold and wet December day,
+	When we touched the ground at JFK, ...
 
-Will exceptions being logged in "customError='On'" mode?
---------------------------------------------------------
+It would be so cool if they would change this to honor Docot Who. It would go something like this:
 
-Yes, even in you configured application to use custom error pages, the exception will be logged.
+	It was a cold and wet December day
+	When I met a man from Gallifrey, ...
 
-How can I configure Elmah.MVC?
-------------------------------
+Would that be just awesome? I think so! Maybe Matt Smith would love it because he looks to me like a U2 fan.
+To tell you the truth I'm not sure who's better Smith, Tennant or Ecclestone? Maybe Ecclestone, but I'm not 100% sure.
+And so, the Gallifrey falls no more they say... That's good I think. Maybe :D Peter Capaldi would know better about that.
 
-There is a simple configuration section in web.config file.
-
-	<appSettings>
-		<add key="elmah.mvc.disableHandler" value="false" />
-		<add key="elmah.mvc.disableHandleErrorFilter" value="false" />
-		<add key="elmah.mvc.requiresAuthentication" value="false" />
-		<add key="elmah.mvc.allowedRoles" value="*" />
-		<add key="elmah.mvc.allowedUsers" value="*" />
-		<add key="elmah.mvc.route" value="elmah" />
-	</appSettings>
-
-* `elmah.mvc.disableHandler` - turn on/off ELMAH.MVC handler
-* `elmah.mvc.disableHandleErrorFilter` - by default `HandleErrorAttribute()` is set as global filter, to disable it, set value to "true"
-* `elmah.mvc.requiresAuthentication` - secure /elmah route with authentication
-* `elmah.mvc.allowedRoles` - in case of authentication is turned on, you can specify exact roles of user that have access (eg. "Admins")
-* `elmah.mvc.allowedUsers` - in case of authentication is turned on, you can specify exact users that have access (eg. "johndoe")
-* `elmah.mvc.route` - configure ELMAH.MVC access route
-
-You can either disable handler or apply authentication, based on application roles.
-
-You can also tweek the ELMAH default route. If you just install the package, ELMAH will be availabled at `/elmah`, howether if you would like to change that, change `elmah.mvc.route`, this setting is a MVC route prefix, used during ELMAH routes registration. For instance, if you change that to `secure/admin/errors` you will get ELMAH at `http://yourapp.com/secure/admin/errors`.
-
-Default route issue
--------------------
-
-You might change the `elmah.mvc.route` to a custom one, but still able to see ELMAH reports at `/elmah`. This issue is caused by the way how [ASP.NET MVC matches controllers in separate namespaces](http://www.beletsky.net/2012/07/aspnet-mvc-routes-and-namespaces.html). There are no good workaround for that (at least one I know), so if I makes a trouble to you, I recommend to reconsider the application, without using default route.
-
-**UPDATE**: You might also consider ignoring ``/elmah`` route explicitly as described [here](https://github.com/alexanderbeletsky/elmah.mvc/issues/26).
-
-**UPDATE 2**: [@chaoaretasty](https://github.com/chaoaretasty) has added an option, to allow ignoring default role. Set `elmah.mvc.IgnoreDefaultRoute` setting option to `true`.
-
-Related articles and posts
---------------------------
-
-[ELMAH.MVC 2.0.1 Update is Out](http://www.beletsky.net/2012/08/elmahmvc-201-update-is-out.html)
-
-[ELMAH.MVC v.2.0.0 - Release Candidate](http://www.beletsky.net/2012/06/elmahmvc-v200-release-candidate.html)
-
-[ELMAH.MVC v2.0 is coming](http://www.beletsky.net/2012/06/elmahmvc-v20-is-coming.html)
-
-[Slides of ELMAH.MVC talk](https://speakerdeck.com/u/alexanderbeletsky/p/elmah-and-elmahmvc)
-
-[ELMAH MVC controller released on NuGet](http://www.beletsky.net/2011/08/elmah-mvc-controller-released-on-nuget.html)
-
-[Integrating ELMAH to ASP.NET MVC in right way](http://www.beletsky.net/2011/03/integrating-elmah-to-aspnet-mvc-in.html)
-
-Recent changes
-==============
-
-* 09-Jul-2013 - v.2.1.1 fixes by [@papci](https://github.com/papci)
-* 01-Jul-2013 - v.2.1.0 user based authentication by [@papci](https://github.com/papci)
-* 02-Jun-2013 - v.2.0.3 ignoring default role by [@chaoaretasty](https://github.com/chaoaretasty)
-* 06-Nov-2012 - v.2.0.2 flag to turn on/off default HandleErrorAttribute()
-* 16-Aug-2012 - v.2.0.1 custom routes, VB.NET support
-* 13-Jun-2012 - v.2.0 major changes, packed to class library, HandleError attribute etc.
-* 11-Jan-2012 - minor style changes and readme correction
-* 29-Aug-2011 - nuget package created
-* 29-Aug-2011 - reimplemented controller to avoid usage of additional routing instructions
+If you're asking yourself why did I write all this stuff, well, that's because It's already morning and there is no sense in sleeping right now.
+Take care now, I'm going to sleep. 
