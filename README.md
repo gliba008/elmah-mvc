@@ -17,11 +17,11 @@ How to use it?
 
 2. In the file ~/App_Start/RouteConfig.cs add following lines to the method void RegisterRoutes(RouteCollection routes):
 
-    // Initialization of implementation of IElmahAuthorizer.
-    ElmahAuthorizer authorizer = new ElmahAuthorizer();
+	    // Initialization of implementation of IElmahAuthorizer.
+	    ElmahAuthorizer authorizer = new ElmahAuthorizer();
 
-    // Initialization of Elmah.Mvc module.
-    Elmah.Mvc.Bootstrap.Initialize(authorizer);
+	    // Initialization of Elmah.Mvc module.
+	    Elmah.Mvc.Bootstrap.Initialize(authorizer);
 
 3. Set up your settings in configuration file Web.config.
 
